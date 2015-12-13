@@ -33,7 +33,7 @@
 #define FAIL (1)	//Status for failure
 
 //Function definitions 
-int		process (CMD *cmdList); 	//Starting point for root of tree
+int	process (CMD *cmdList); 		//Starting point for root of tree
 void	specialCases(CMD *cmdList);		//Handles special & and ; cases																
 int 	simple(CMD *cmdList); 			//Executes a simple command
 int 	Error(CMD* cmdList);			//Sets environment variable to errno
