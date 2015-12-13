@@ -143,8 +143,7 @@ int redirectOut(CMD *cmdList){
 		int newfd;
 		if(cmdList->toType==RED_OUT) 
 			newfd = creat(cmdList->toFile, S_IRWXU);
-		else newfd = open(cmdList->toFile, 
-						O_CREAT|O_WRONLY|O_APPEND, S_IRWXU);
+		else newfd = open(cmdList->toFile, O_CREAT|O_WRONLY|O_APPEND, S_IRWXU);
 		if(newfd==-1){ 
 			status = errno;
 			perror(cmdList->toFile);
@@ -164,8 +163,7 @@ int redirectOutBsh(CMD *cmdList, int* status){
 		int newfd;
 		if(cmdList->toType==RED_OUT) 
 			newfd = creat(cmdList->toFile, S_IRWXU);
-		else newfd = open(cmdList->toFile, 
-						O_CREAT|O_WRONLY|O_APPEND, S_IRWXU);
+		else newfd = open(cmdList->toFile, O_CREAT|O_WRONLY|O_APPEND, S_IRWXU);
 		if(newfd==-1){ 
 			*status = errno;
 			WARN(*status, cmdList->toFile);
@@ -187,9 +185,8 @@ int simple(CMD *cmdList){
 			fprintf(stderr, "Usage: dirs\n");
 			set(1);
 			return FAIL;
-		} if(!getcwd(buffer, PATH_MAX)) {
-				return Error(cmdList);
-		} saved = redirectOutBsh(cmdList, &status);
+		} if(!getcwd(buffer, PATH_MAX)) return Error(cmdList);
+		saved = redirectOutBsh(cmdList, &status);
 		if(saved==-1) return status;
 		printf("%s\n", buffer);
 		if(cmdList->toFile){
@@ -206,9 +203,7 @@ int simple(CMD *cmdList){
 				if(!strcmp(cmdList->locVar[i], "HOME"))
 					home = cmdList->locVal[i];
 			} 
-			if(chdir(home)==-1) {
-				status = Error(cmdList);
-			} 
+			if(chdir(home)==-1) status = Error(cmdList);
 		} else if(cmdList->argc==2){
 			if(chdir(cmdList->argv[1])==-1){
 				status = Error(cmdList);
@@ -233,8 +228,7 @@ int simple(CMD *cmdList){
 		if(cmdList->toFile){
 			if(cmdList->toType==RED_OUT) 
 				newfd = creat(cmdList->toFile, S_IRWXU);
-			else newfd = open(cmdList->toFile, 
-				O_CREAT|O_WRONLY|O_APPEND, S_IRWXU);
+			else newfd = open(cmdList->toFile, O_CREAT|O_WRONLY|O_APPEND, S_IRWXU);
 			if(newfd==-1){ 
 				status = errno;
 				perror(cmdList->toFile);
