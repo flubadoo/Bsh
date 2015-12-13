@@ -1,3 +1,5 @@
+(Taken from Stanley Eisentat's CPSC 323, Assignment 5)
+
 CPSC 323   Homework #5   The Shell Game: Sister Sue Saw B-Shells ...
 
 Bsh is a simple shell, a baby brother of the Bourne-again shell
