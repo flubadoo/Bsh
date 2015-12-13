@@ -33,11 +33,11 @@
 #define FAIL (1)	//Status for failure
 
 //Function definitions 
-int		process (CMD *cmdList); 		//Starting point for root of tree
+int		process (CMD *cmdList); 	//Starting point for root of tree
 void	specialCases(CMD *cmdList);		//Handles special & and ; cases																
 int 	simple(CMD *cmdList); 			//Executes a simple command
 int 	Error(CMD* cmdList);			//Sets environment variable to errno
-void 	extractLocals(CMD *cmdList);	//Extracts local variables
+void 	extractLocals(CMD *cmdList);		//Extracts local variables
 int 	toPipe(CMD *cmdList);			//Pipes from left to right child
 void 	redirectIn(CMD *cmdList);		//Redirects stdin of anything
 int 	redirectOut(CMD *cmdList);		//Redirects stdout of anything
@@ -71,11 +71,11 @@ void backG(CMD *cmdList){
 //Function called from mainBsh.c, handles different types of tree cmdList by 
 //calling different subroutines, or recursively calling itself
 int process (CMD *cmdList){
-	reap();														//Reap zombies
+	reap();								//Reap zombies
 	int pid, status = 0;
-	if(cmdList->type==SIMPLE){									//Simple 
+	if(cmdList->type==SIMPLE){					//Simple 
 		status = simple(cmdList);
-	} else if(cmdList->type==SUBCMD){							//Stage
+	} else if(cmdList->type==SUBCMD){				//Stage
 		if((pid = fork())<0){
 			set((status=errno));
 			perror("pipe2"); 
@@ -91,18 +91,18 @@ int process (CMD *cmdList){
 			signal(SIGINT, SIG_DFL);
 			status = exitStatus(status);
 		}
-	} else if(cmdList->type==PIPE){								//Pipeline
+	} else if(cmdList->type==PIPE){					//Pipeline
 		status = toPipe(cmdList);
-	} else if(cmdList->type==SEP_AND){							// && case								
+	} else if(cmdList->type==SEP_AND){				// && case								
 		if(!(status = process(cmdList->left))) 		
 		status = process(cmdList->right);
-	} else if(cmdList->type==SEP_OR){ 							// || case
+	} else if(cmdList->type==SEP_OR){ 				// || case
 		if((status = process(cmdList->left)))
 		status = process(cmdList->right);
-	} else if(cmdList->type==SEP_END){							// ; case
+	} else if(cmdList->type==SEP_END){				// ; case
 		status = process(cmdList->left);		
 		if(cmdList->right) status = process(cmdList->right);                    
-	} else if(cmdList->type==SEP_BG){							// & case
+	} else if(cmdList->type==SEP_BG){				// & case
 		specialCases(cmdList);
 		if (cmdList->right) status = process(cmdList->right);
 	} set(status); 
@@ -112,7 +112,7 @@ int process (CMD *cmdList){
 //Treats the special case of A; B & and A& B&
 void specialCases(CMD *cmdList){
 	if((cmdList->left->type == SEP_END || cmdList->left->type == SEP_BG)
-									   && cmdList->left->right){ 
+						&& cmdList->left->right){ 
 		CMD *new = cmdList->left->right; 
 		cmdList->left->right = NULL;
 		process(cmdList->left);
@@ -275,7 +275,7 @@ int Error(CMD* cmdList){
 
 //Function that establishes a pipe between left and right childs of cmdList
 int toPipe(CMD *cmdList){
-	int fd[2];					//File descriptors for pipe
+	int fd[2];			//File descriptors for pipe
 	int pid, pid2, status, 		//Process ID for child1, child2, status
 		result1=0, result2=0;	//Store statuses of two children
 
@@ -283,7 +283,7 @@ int toPipe(CMD *cmdList){
 		WARN((status=errno), "fork pipe");//Catching system failures
 		return status;
 	} else if(pid == 0){
-		close(fd[0]);			//No reading from pipe
+		close(fd[0]);		//No reading from pipe
 		dup2(fd[1], 1);			
 		close(fd[1]);
 		result1 = process(cmdList->left); //Return status from process
