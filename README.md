@@ -137,18 +137,6 @@ Fine Points
    process()) to avoid running out of processes.  When it does so, it writes
    the process id and status to stderr using the format "Completed: %d (%d)\n".
 
-
-Limitations
-~~~~~~~~~~~
-The following will be worth at most 12 points each
- * &&, ||, and &
- * grouped commands
- * the status variable $?
-Also, pipes will be worth at most 20 points.  Each "at most" is a crude upper
-bound intended to give more flexibility in developing the test script and to
-allow interactions between features in different groups above.
-
-
 Appendix
 ~~~~~~~~
 The syntax for a command is
